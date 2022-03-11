@@ -190,8 +190,8 @@ if(modalFollowCloseElem) {
 }
 
 function makeFollowItem(item) {
-    const globalContElem = document.querySelector('#globalConst');
-    const loginIuser = globalContElem.dataset.iuser;
+    const globalConstElem = document.querySelector('#globalConst');
+    const loginIuser = globalConstElem.dataset.iuser;
 
     const cont = document.createElement('div');
     cont.className = 'follow-item';

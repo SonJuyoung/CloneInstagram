@@ -21,10 +21,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         param.setEmail(email);
         param.setProvider(ProviderType.LOCAL.toString());
 
-        UserEntity user = mapper.findByEmail(param);
-        if(user == null) {
+        UserEntity savedUser = mapper.findByEmail(param);
+        if(savedUser == null) {
             throw new UsernameNotFoundException(" Can not find user. ");
         }
-        return CustomUserPrincipal.create(user);
+        return CustomUserPrincipal.create(savedUser);
     }
 }

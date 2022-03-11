@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class UserEntity {
-    private Long iuser;
+    private long iuser;
     private String provider;
     private String email;
     private String pw;

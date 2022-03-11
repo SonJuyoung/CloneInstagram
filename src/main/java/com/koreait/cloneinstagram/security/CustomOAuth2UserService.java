@@ -18,7 +18,6 @@ import org.springframework.util.StringUtils;
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
-
     private final UserMapper mapper;
 
     @Override
@@ -38,7 +37,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if(!StringUtils.hasText(oAuth2UserInfo.getEmail())) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
-
 
         ProviderType providerType = ProviderType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
         String provider = providerType.toString();

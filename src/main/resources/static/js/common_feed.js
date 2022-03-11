@@ -8,11 +8,11 @@ function getDateTimeInfo(dt) {
     const diffSec = nowDtSec - targetDtSec;
     if(diffSec < 120) {
         return '1분 전';
-    } else if(diffSec < 3600) { //분 단위
+    } else if(diffSec < 3600) { //분 단위 (60 * 60)
         return `${parseInt(diffSec / 60)}분 전`;
-    } else if(diffSec < 86400) { //시간 단위
+    } else if(diffSec < 86400) { //시간 단위 (60 * 60 * 24)
         return `${parseInt(diffSec / 3600)}시간 전`;
-    } else if(diffSec < 604800) { //일 단위
+    } else if(diffSec < 2592000) { //일 단위 (60 * 60 * 24 * 30)
         return `${parseInt(diffSec / 86400)}일 전`;
     }
     return targetDt.toLocaleString();
@@ -46,13 +46,13 @@ const feedObj = {
             const itemContainer = document.createElement('div');
             itemContainer.className = 'item mt-3 mb-3';
 
-            // 글쓴이 정보 영역
-            const imgTag = `<img src="/pic/profile/${item.iuser}/${item.mainimg}" class="pointer profile w30 h30" 
-            onclick="moveToProfile(${item.iuser});" onerror="this.onerror=null; this.src='/img/defaultProfileImg.png'">`;
-
             const regDtInfo = getDateTimeInfo(item.regdt);
             const topDiv = document.createElement('div');
             topDiv.className = 'd-flex flex-row ps-3 pe-3';
+
+            // 글쓴이 정보 영역
+            const imgTag = `<img src="/pic/profile/${item.iuser}/${item.mainimg}" class="pointer profile w30 h30" 
+            onclick="moveToProfile(${item.iuser});" onerror="this.onerror=null; this.src='/img/defaultProfileImg.png'">`;
             topDiv.innerHTML = `
                 <div class="d-flex flex-column justify-content-center">${imgTag}</div>
                 <div class="p-3 flex-grow-1">
@@ -89,11 +89,12 @@ const feedObj = {
             itemContainer.append(topDiv);
             itemContainer.append(imgSwiperDiv);
 
-            //좋아요 영역
+            //좋아요, dm 영역
             const btnsDiv = document.createElement('div');
-            btnsDiv.className = 'favCont p-2';
+            btnsDiv.className = 'favCont p-2 d-flex flex-row';
+
             const heartIcon = document.createElement('i');
-            heartIcon.className = 'fa-heart pointer rem1_2';
+            heartIcon.className = 'fa-heart pointer rem1_2 me-3';
             if(item.isFav === 1) { //좋아요 O
                 heartIcon.classList.add('fas');
             } else { //좋아요 X
@@ -118,11 +119,21 @@ const feedObj = {
                                     favCntHiddenInput.value = favCnt + 1;
                                     break;
                             }
+                            //일부로 이벤트 발생!!!!
                             favCntHiddenInput.dispatchEvent(new Event("change"));
                         }
                     });
             });
+
+            const dmDiv = document.createElement('div');
+            dmDiv.className = 'pointer';
+            dmDiv.addEventListener('click', ()=> {
+               location.href=`/dm?oppoiuser=${item.iuser}`;
+            });
+            dmDiv.innerHTML = `<svg aria-label="게시물 공유" class="_8-yf5 " color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line><polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon></svg>`;
+
             btnsDiv.append(heartIcon);
+            btnsDiv.append(dmDiv);
             itemContainer.append(btnsDiv);
 
             const favDiv = document.createElement('div');
@@ -185,10 +196,7 @@ const feedObj = {
                 moreCmtDiv.append(moreCmtSpan);
                 cmtDiv.append(moreCmtDiv);
             }
-
-
             cmtDiv.append(cmtFormDiv);
-
 
             const cmtInput = document.createElement('input');
             cmtInput.type = 'text';
@@ -305,6 +313,7 @@ const feedObj = {
             console.log(myJson);
             this.itemLength = myJson.length;
             this.makeFeedList(myJson);
+            this.hideLoading();
         }, param);
 
     },
@@ -336,6 +345,6 @@ const feedObj = {
 
         return cmtItemContainerDiv;
     },
-    hideLoading: function() { this.loadingElem.classList.add('hide');},
-    showLoading: function() { this.loadingElem.classList.remove('hide'); }
+    hideLoading: function() { this.loadingElem.classList.add('display-none');},
+    showLoading: function() { this.loadingElem.classList.remove('display-none'); }
 }

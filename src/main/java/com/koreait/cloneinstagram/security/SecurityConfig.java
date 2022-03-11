@@ -1,7 +1,6 @@
 package com.koreait.cloneinstagram.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,7 +15,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
     private final CustomOAuth2UserService customOauth2UserService;
     private final CustomUserDetailsService customUserDetailsService;
 
@@ -25,10 +23,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+    }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable(); //ajax-post 막힘을 풀어주기 위해
+        
+        http.headers().frameOptions().sameOrigin();
 
         http
             .authorizeRequests()
@@ -55,8 +59,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
-    }
+
 }

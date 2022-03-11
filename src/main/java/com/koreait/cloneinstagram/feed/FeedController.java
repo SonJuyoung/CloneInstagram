@@ -17,7 +17,7 @@ public class FeedController {
     private final FeedService service;
 
     @GetMapping
-    public String main() {
+    public String index() {
         return "feed/index";
     }
 

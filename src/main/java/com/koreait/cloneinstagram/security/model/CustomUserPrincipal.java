@@ -12,8 +12,8 @@ import java.util.Collections;
 import java.util.Map;
 
 public class CustomUserPrincipal implements OAuth2User, UserDetails {
+    //attribute는 사용하지 않음.
     @Getter private UserEntity user;
-    private Map<String, Object> attributes;
 
     public CustomUserPrincipal(UserEntity user) {
         this.user = user;
@@ -23,11 +23,6 @@ public class CustomUserPrincipal implements OAuth2User, UserDetails {
         return new CustomUserPrincipal(user);
     }
 
-    public static CustomUserPrincipal create(UserEntity user, Map<String, Object> attributes) {
-        CustomUserPrincipal userPrincipal = create(user);
-        userPrincipal.setAttributes(attributes);
-        return userPrincipal;
-    }
     @Override
     public String getPassword() {
         return user.getPw();
@@ -58,13 +53,9 @@ public class CustomUserPrincipal implements OAuth2User, UserDetails {
         return true;
     }
 
-    public void setAttributes(Map<String, Object> attributes) {
-        this.attributes = attributes;
-    }
-
     @Override
     public Map<String, Object> getAttributes() {
-        return this.attributes;
+        return null;
     }
 
     @Override

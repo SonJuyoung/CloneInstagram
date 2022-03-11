@@ -5,5 +5,7 @@ public enum ProviderType {
     FACEBOOK,
     NAVER,
     KAKAO,
-    LOCAL;
+    LOCAL,
+    APPLE,
+    GITHUB
 }
